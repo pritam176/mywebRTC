@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function(event) {
+        var links = document.querySelectorAll('a');
+        var baseUri = 'exp://myapp';
+        var param ="";
+
+        // Take the uri from the params
+        var qs = decodeURIComponent(document.location.search);
+        if (qs) {
+          baseUri = qs.split('?linkingUri=')[1];
+          param =qs.split('param=')[1];
+         // alert(param);
+        //alert(qs.split('param2=')[1]);
+        }
+
+        // Update the link urls
+        for (var i = 0; i < links.length; ++i) {
+          links[i].href = links[i].href.replace('exp://myapp/', baseUri);
+          console.log(links[i].href);
+        }
+        
+
+       
+      });
+    </script>
+</head>
+<body>
+    <p th:text="'Hello, ' + ${name} + '!'" />
+    
+    <a href="exp://myapp/message=pritam">
+          Pass back a message of "hello world"
+        </a>
+        
+        <a href="https://docs.expo.io/workflow/linking/?redirected">
+          Pass back a message out side"
+        </a>
+</body>
+</html>

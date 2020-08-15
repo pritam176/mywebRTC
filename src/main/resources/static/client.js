@@ -7,12 +7,12 @@ var configuration = {
 };
 const selfView = document.querySelector("#selfView");
 const remoteView = document.querySelector("#remoteView");
-
+var localVideoStream 
 var username ;
 var dest;
 var conn ;
 function start() {
-    conn = new WebSocket('wss://my-app-rtc.herokuapp.com/socket');
+    conn = new WebSocket('wss://192.168.0.165:8011/socket');
 	username = document.getElementById("username").value;
 	conn.onopen = function() {
 		console.log("Connected to the signaling server");
@@ -27,16 +27,16 @@ function start() {
 		
 		var content = JSON.parse(msg.data);
 		
-		if(typeof dest === 'undefined' )
+		if( dest  == null )
 			dest =content.initeator;
 		
 		
 		
-		if(typeof peerConnection === 'undefined' && content.event==='offer'){
+		if( peerConnection == null && content.event==='offer'){
 			console.log("initialize");
 			initialize();
 			
-			var localVideoStream =  await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+			 localVideoStream =  await navigator.mediaDevices.getUserMedia({video: true, audio: true});
 			selfView.srcObject = localVideoStream
 			peerConnection.addStream(localVideoStream);
 			
@@ -141,6 +141,14 @@ var input = document.getElementById("messageInput");
 	// when we receive a message from the other peer, printing it on the console
 	dataChannel.onmessage = function(event) {
 		console.log("message:", event.data);
+		//end call remote end
+		if(event.data ==='done'){
+			peerConnection=null;
+			remoteView.srcObject =null;
+			selfView.srcObject = null;
+			localVideoStream.getTracks().forEach(track => track.stop());
+			dest = null;
+		}
 	};
 
 	dataChannel.onclose = function() {
@@ -156,7 +164,7 @@ async function createOffer() {
 	dest = document.getElementById("dest").value;
 	initialize();
 	
-	var localVideoStream =  await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+	 localVideoStream =  await navigator.mediaDevices.getUserMedia({video: true, audio: true});
 	selfView.srcObject = localVideoStream
 	peerConnection.addStream(localVideoStream);
 	
@@ -207,4 +215,12 @@ function handleAnswer(answer) {
 function sendMessage() {
 	dataChannel.send(input.value);
 	input.value = "";
+}
+
+function endCall(){
+	dataChannel.send('done');
+	peerConnection =null;
+	selfView.srcObject = null;
+	remoteView.srcObject =null;
+	localVideoStream.getTracks().forEach(track => track.stop());
 }

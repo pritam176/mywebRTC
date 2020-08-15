@@ -57,14 +57,16 @@ input {
    
     <input id="dest" type="text" class="form-control"
    placeholder="dest">
-  <button type="button" class="btn btn-primary" onclick='createOffer()'>call</button>
+  <button type="button" class="btn btn-primary" onclick='createOffer()'>Start call</button>
+  
+  <button type="button" class="btn btn-primary" onclick='endCall()'>End call</button>
   <P>remoteView</P>
    <div>
     <video id="remoteView" width="320" height="320" autoplay style="display: inline;"></video>
   </div>
 <P>selfView</P>
   <div>
-    <video id="selfView" width="320" height="320" autoplay style="display: inline;"></video>
+    <video id="selfView" width="320" height="320" muted="muted" autoplay style="display: inline;"></video>
   </div>
   
  <script src="./client.js"></script>

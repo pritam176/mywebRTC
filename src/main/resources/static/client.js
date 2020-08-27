@@ -12,7 +12,7 @@ var username ;
 var dest;
 var conn ;
 function start() {
-    conn = new WebSocket('wss://192.168.0.165:8011/socket');
+    conn = new WebSocket('wss://my-app-rtc.herokuapp.com/socket');
 	username = document.getElementById("username").value;
 	conn.onopen = function() {
 		console.log("Connected to the signaling server");
